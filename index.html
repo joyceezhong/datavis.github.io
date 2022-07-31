@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<head>
+    <title>Bigfoot</title>
+</head>
+<link href="coverpage.css" rel = "stylesheet" />
+
+
+<div text-align="center">
+    <h1>Introduction to Bigfoot</h1>
+</div>
+<div class="content">
+    <div class="caption">
+        <img src="images/bigfoot.jpeg" width="90%">
+        <!-- image source: https://i.cbc.ca/1.4362553.1572547255!/fileImage/httpImage/image.jpg_gen/derivatives/16x9_780/bigfoot-film-patterson-gimlin.jpg-->
+
+    </div>
+    <div>
+        <p>
+            For years, there have been Bigfoot sightings throughout North America.<br />
+            But how did the legend of Sasquatch start? And where is the infamous ape-like creature now?<br />
+            In this visualization, we will explore:
+        <ul>
+            <li>The history of Bigfoot</li>
+            <li>What Bigfoot looks like</li>
+            <li>Locations of Bigfoot Sightings</li>
+        </ul>
+        </p>
+    </div>
+</div>
+
+<script src="https://d3js.org/d3.v4.js"></script>
+
+<div id="graph_div">
+    <br></br>
+    <h2>Reported Bigfoot Sightings in North America over Time</h2>
+</div>
+<script>
+
+    var margin = {top: 10, right: 30, bottom: 30, left: 60},
+        width = 1200 - margin.left - margin.right,
+        height = 600 - margin.top - margin.bottom;
+    
+    var svg = d3.select("#graph_div")
+      .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+        .attr("transform",
+              "translate(" + margin.left + "," + margin.top + ")");
+    
+    d3.csv("timestamps.csv",
+    
+      function(d){
+        return { date : d3.timeParse("%Y-%m-%d")(d.date), value : d.value }
+      },
+    
+      function(data) {
+        var x = d3.scaleTime()
+          .domain(d3.extent(data, function(d) { return d.date; }))
+          .range([ 0, width ]);
+        svg.append("g")
+          .attr("class", "axisWhite")
+          .attr("transform", "translate(0," + height + ")")
+          .call(d3.axisBottom(x));
+    
+        var y = d3.scaleLinear()
+          .domain([0, d3.max(data, function(d) { return +d.value; })])
+          .range([ height, 0 ]);
+        svg.append("g")
+          .attr("class", "axisWhite")
+          .call(d3.axisLeft(y));
+        
+        var bisect = d3.bisector(function(d) { return d.date; }).left;
+
+        var focus = svg
+            .append('g')
+            .append('circle')
+            .style("fill", "none")
+            .attr("stroke", "white")
+            .attr('r', 8.5)
+            .style("opacity", 0)
+            .attr("class", "axisWhite")
+
+        var focusText = svg
+            .append('g')
+            .append('text')
+            .style("opacity", 0)
+            .attr("color", "white")
+            .attr("text-anchor", "left")
+            .attr("alignment-baseline", "middle")
+            .attr("class", "axisWhite")
+
+        svg.append("path")
+          .datum(data)
+          .attr("fill", "none")
+          .attr("stroke", "green")
+          .attr("stroke-width", 1.5)
+          .attr("d", d3.line()
+            .x(function(d) { return x(d.date) })
+            .y(function(d) { return y(d.value) })
+            )
+        function mouseover() {
+            focus.style("opacity", 1)
+            focusText.style("opacity",1)
+            .attr("class", "axisWhite")
+        }
+        function mousemove() {
+            var x0 = x.invert(d3.mouse(this)[0]);
+            var i = bisect(data, x0, 1);
+            selectedData = data[i]
+            focus
+                .attr("class", "axisWhite")
+                .attr("cx", x(selectedData.date))
+                .attr("cy", y(selectedData.value))
+                
+            focusText
+                .attr("class", "axisWhite")
+                .style('fill', 'darkOrange')
+                .style("position", "absolute")
+                .html("Year:" + selectedData.date.getFullYear()+ ", " + "Sightings:" + selectedData.value)
+                .attr("x", x(selectedData.date)+15)
+                .attr("y", y(selectedData.value))
+            }
+        function mouseout() {
+            focus.style("opacity", 0)
+            focusText.style("opacity", 0)
+        }
+        svg
+            .append('rect')
+            .style("fill", "none")
+            .style("stroke", "black")
+            .style("pointer-events", "all")
+            .attr('width', width)
+            .attr('height', height)
+            .on('mouseover', mouseover)
+            .on('mousemove', mousemove)
+            .on('mouseout', mouseout);
+        })
+</script>
+<div text-align="center">
+    <p></p>
+    <div class="pagination">
+        <a href="end.html" class="previous">&#8249;</a>
+        <a href="history.html" class="next">&#8250;</a>
+    </div>
+</div>

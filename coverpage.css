@@ -1,0 +1,92 @@
+body {
+    background-color: black;
+    text-align:center;
+}
+h1 {
+    color: white;
+    text-align: center;
+    font-family: "Lucida Console", "Courier New", monospace;
+  }
+
+h2 {
+    color: white;
+    text-align: center;
+    font-family: "Lucida Console", "Courier New", monospace;
+  }
+
+p {
+    color: white;
+    text-align: center;
+    font-family: "Lucida Console", "Courier New", monospace;
+    padding-right: 100px;
+    padding-left: 100px;
+
+  }
+ul {
+    color: white;
+    text-align: center;
+    font-family: "Lucida Console", "Courier New", monospace;
+    list-style-position:inside; 
+    padding-right: 100px;
+    padding-left: 100px;
+  }
+.pagination {
+    color: white;
+    text-align: center;
+    font-family: "Lucida Console", "Courier New", monospace;
+}
+.my_dataviz {
+    background-color: white;
+    color:white;
+    text-align: center;
+    font-family: "Lucida Console", "Courier New", monospace;
+}
+axisWhite line{
+    stroke: white;
+  }
+  
+  .axisWhite path{
+    stroke: white;
+  }
+  
+  .axisWhite text{
+    fill: white;
+    color:white;
+  }
+
+.tooltip {
+    background-color:white;
+    opacity:1;
+    border:solid;
+    border-width: 2px;
+    border-radius: 5px;
+    padding: 5px;
+    font-family: "Lucida Console", "Courier New", monospace;
+    display:inline;
+}
+
+a {
+    text-decoration: none;
+    display: inline-block;
+    padding: 8px 16px;
+  }
+  
+  a:hover {
+    background-color: #ddd;
+    color: black;
+  }
+  
+  .previous {
+    background-color: gray;
+    color: black;
+  }
+  
+  .next {
+    background-color: green;
+    color: white;
+  }
+
+
+
+
+

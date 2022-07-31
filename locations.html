@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<head>
+    <title>Bigfoot</title>
+</head>
+<link href="coverpage.css" rel = "stylesheet" />
+
+<!--info source: https://www.travelchannel.com/shows/in-search-of-monsters/articles/the-8-best-places-to-see-bigfoot-right-now -->
+<div text-align="center">
+    <h1>Mapping the Myth</h1>
+</div>
+<div class="content">
+    <div class="caption">
+        <img src="images/another_bigfoot_photo.jpeg" width="60%">
+        <!-- image source: https://cf-images.us-east-1.prod.boltdns.net/v1/static/5615998031001/a0ee5a2a-d3bf-4ca0-89de-d4d2eda9f700/b1559251-f7ab-48c4-9fd8-ee4dd1f85b99/1280x720/match/image.jpg-->
+    </div>
+    <div>
+        <h2>Common Locations of Bigfoot Sightings</h2>
+        <p style = "text-align:left">According to data from The Bigfoot Field Researchers Organization, 
+            the most common places to run into Bigfoot are Washington state, California, and Pennsylvania.
+            In Washington state, the best changes of finding Bigfoot are in the Blue Mountains, and Ape Canyon,
+            where a group of miners in 1924 reported being attacked by multiple Sasquatch. 
+            California should be no surprise as a top Bigfoot destination, as that is where the name was
+            coined. As for Pennsylvania, in the Applachian Mountain range with acres of forests,
+            you might catch a sighting of the notorious Sasquatch there.</p>
+        <br>
+        <img src="images/bigfoot_again.jpeg" width="50%">
+            <!--image source: https://www.science.org/do/10.1126/article.22891/abs/sn-bigfooth.jpg-->
+        <br>
+        <h2>Other Locations</h2>
+        <p style = "text-align:left"> Although the three states listed above have the most Bigfoot sightings
+            on record, the following states are also famous for their own run-ins with Bigfoot:
+        </p>
+        <ul>
+            <li style = "text-align:left"> <b>Michigan:</b> Some of the highest amounts of Bigfoot activity
+            comes from the Seney National Wildlife Regufee in Michigan's wild Upper Peninsula.</li>
+            <li style = "text-align:left"><b>New York:</b>  The area near Lake George has been referred to as the 
+            "Bigfoot Capital of the East Coast."</li>
+            <li style = "text-align:left"><b>Ohio:</b>  The eastern side of Ohio, bordering the Appalachian Mountains,
+            is famous for the recording of the "Ohio Howl", believed to be the call of Bigfoot.</li>
+            <li style = "text-align:left"><b>Oregon:</b>  Located next to hotspot Washington State, Sasquatch has been
+            spotted near the Oregon Caves National Monument.</li>
+            <li style = "text-align:left"><b>Texas:</b> Bigfoot is apparently no stranger to the Lonestar State,
+            as East Texas, bordering Oklahoma and Louisiana, is a common area of Bigfoot sightings.</li>
+        </ul>
+    </div>
+</div>
+<br>
+<h2>Top 20 Most Common Bigfoot Sightings by State</h2>
+<!-- Load d3.js and the geo projection plugin -->
+<script src="https://d3js.org/d3.v4.js"></script>
+<script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
+
+<!-- Create an element where the map will take place -->
+<div id="graph_div"></div>
+
+<style>
+.circle:hover{
+  stroke: blueviolet;
+  stroke-width: 4px;
+}
+</style>
+<script>
+
+    var width = 960
+    var height = 500
+    var scale = 800;
+    
+    var svg = d3.select("#graph_div")
+      .append("svg")
+      .attr("width", width)
+      .attr("height", height)
+    
+    var projection = d3.geoMercator()
+        .center([-98.58,39.83])
+        .translate([width*0.5,height*0.42])  // placed near center
+        .scale(scale);
+    
+    //lat long data from https://www.latlong.net/category/states-236-14.html
+    // sightings data from https://www.satelliteinternet.com/resources/states-with-the-most-bigfoot-sightings/
+    var markers = [
+      {long: -120.740135, lat: 47.751076, name: "Washington State", sightings: 676},
+      {long: -119.417931, lat: 36.778259, name: "California", sightings: 445},
+      {long: -81.760254, lat: 27.994402, name: "Florida", sightings: 328},
+      {long: -82.996216, lat: 40.367474, name: "Ohio", sightings: 302},
+      {long: -89.000000, lat: 40.000000, name: "Illinois", sightings: 296},
+      {long: -120.500000, lat: 44.000000, name: "Oregon", sightings: 254},
+      {long: -100.000000, lat: 31.000000, name: "Texas", sightings: 246},
+      {long: -84.506836, lat: 44.182205, name: "Michigan", sightings: 220},
+      {long: -92.603760, lat: 38.573936, name: "Missouri", sightings: 154},
+      {long: -83.441162, lat: 33.247875, name: "Georgia", sightings: 132},
+      {long: -105.358887, lat: 39.113014, name: "Colorado", sightings: 128},
+      {long: -77.194527, lat: 41.203323, name: "Pennsylvania", sightings: 118},
+      {long: -75.000000, lat: 43.000000, name: "New York", sightings: 113},
+      {long: -84.270020, lat: 37.839333, name: "Kentucky", sightings: 113},
+      {long: -92.199997, lat: 34.799999, name: "Arkansas", sightings: 108},
+      {long: -80.500000, lat: 39.000000, name: "West Virginia", sightings: 104},
+      {long: -96.921387, lat: 36.084621, name: "Oklahoma", sightings: 104},
+      {long: -89.500000, lat: 44.500000, name: "Wisconsin", sightings: 102},
+      {long: -86.660156, lat: 35.860119, name: "Tennessee", sightings: 101},
+      {long: -80.793457, lat: 35.782169, name: "North Carolina", sightings: 98}
+    ];
+    
+    d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson", function(data){
+    
+        data.features = data.features.filter( function(d){return d.properties.name=="USA"} )
+    
+        svg.append("g")
+            .selectAll("path")
+            .data(data.features)
+            .enter()
+            .append("path")
+              .attr("fill", "#b8b8b8")
+              .attr("d", d3.geoPath()
+                  .projection(projection)
+              )
+            .style("stroke", "white")
+            .style("opacity", .3)
+    
+        var Tooltip = d3.select("#graph_div")
+          .append("div")
+          .attr("class", "tooltip")
+          .style("opacity", 1)
+          .style("background-color", "white")
+          .style("border", "solid")
+          .style("border-width", "2px")
+          .style("border-radius", "5px")
+          .style("padding", "5px")
+    
+        var mouseover = function(d) {
+          Tooltip.style("opacity", 1)
+        }
+        var mousemove = function(d) {
+          Tooltip
+            .html(d.name +" Sightings: " + d.sightings)
+            .style("left", (d3.mouse(this)[0]+10) + "px")
+            .style("top", (d3.mouse(this)[1]) + "px")
+        }
+        var mouseleave = function(d) {
+          Tooltip.style("opacity", 0)
+        }
+    
+        svg
+          .selectAll("myCircles")
+          .data(markers)
+          .enter()
+          .append("circle")
+            .attr("cx", function(d){ return projection([d.long, d.lat])[0] })
+            .attr("cy", function(d){ return projection([d.long, d.lat])[1] })
+            .attr("r", 14)
+            .attr("class", "circle")
+            .style("fill", "69b3a2")
+            .attr("stroke", "green")
+            .attr("stroke-width", 3)
+            .attr("fill-opacity", .4)
+          .on("mouseover", mouseover)
+          .on("mousemove", mousemove)
+          .on("mouseleave", mouseleave)
+    
+    })
+    
+    </script>
+<div text-align="center">
+    <p></p>
+    <div class="pagination">
+        <a href="history.html" class="previous">&#8249;</a>
+        <a href="end.html" class="next">&#8250;</a>
+    </div>
+</div>

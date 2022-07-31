@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<head>
+    <title>Bigfoot</title>
+</head>
+<link href="coverpage.css" rel = "stylesheet" />
+
+<!--info source: https://www.history.com/news/bigfoot-legend-newspaper -->
+<div text-align="center">
+    <h1>The History of Bigfoot</h1>
+</div>
+<div class="content">
+    <div class="caption">
+        <img src="images/bigfoot-sign.jpeg" width="80%">
+        <!-- image source: https://www.cnbc.com/2013/10/04/not-just-a-myth-scientists-claim-bigfoot-evidence.html-->
+    </div>
+    <div>
+        <h2> Where It All Began</h2>
+        <p style = "text-align:left">Before the name "Bigfoot" was ever known, the Indigenous peoples across North America 
+            already had their own tales of hair-covered, man-like creatures roaming in the wilderness. In fact,
+        that is where the name "Sasquatch" (meaning "wild man") originates. The coining of the name, "Bigfoot" comes from a bulldozer
+        operater in California finding a pair of 16 inch human-like footprints in the Six Rivers National
+        forest. There have been various Bigfoot sightings throughout North America, with the earliest one 
+        recorded in 1930. But even with numerous first-hand accounts of running into the infamous Sasquatch,
+        there has never been any definitive proof of its existence. </p>
+        <img src="images/foot.png" width="20%">
+            <!--image source: https://i.natgeofe.com/n/3ee090c8-e5a3-42be-9924-0e636327c0b8/71426_2x3.jpg-->
+        <br>
+        <h2>Other Names</h2>
+        <p style = "text-align:left"> Although the names "Bigfoot" and "Sasquatch" are most commonly used,
+            this hairy monster is called various other names in other regions:
+        </p>
+        <ul>
+            <li style = "text-align:left">"Skunk Ape" in Flordia</li>
+            <li style = "text-align:left">"Grassman" in Ohio</li>
+            <li style = "text-align:left">"Fouke Monster" in Arkansas</li>
+            <li style = "text-align:left">"The Big Muddy Monster" in Illinois</li>
+            <li style = "text-align:left">"The Old Man of the Mountain" in West Virginia</li>
+        </ul>
+        <img src="images/bigfoot_mystery.jpeg" width="20%">
+            <!--image source: https://i.natgeofe.com/n/3ee090c8-e5a3-42be-9924-0e636327c0b8/71426_2x3.jpg-->
+        <br>
+        <h2>Physical Description</h2>
+        <p style = "text-align:left">Big Food is described as a bipedal primate, ranging from 6 to 12 feet tall, with a foul odor and 
+            moves silently, though it can also emit a high-pitched scream. This is not unlike the Yeti, also
+            known as the Abominable Snowman, which roams the Himalayas. In fact, many comparisons between the
+            two have been made, with some remarking Bigfoot as the "Yeti of North America."
+        </p>
+        <br>
+    </div>
+</div>
+<h2>Average Foot Size and Height of Animals</h2>
+<div id="graph_div"></div>
+<script src="https://d3js.org/d3.v4.js"></script>
+
+<button onclick="update('Foot Size(in)')">Foot Size</button>
+<button onclick="update('Height(in)')">Height</button>
+<script>
+    var margin = {top: 30, right: 30, bottom: 70, left: 60},
+        width = 1000 - margin.left - margin.right,
+        height = 500 - margin.top - margin.bottom;
+    
+    var svg = d3.select("#graph_div")
+      .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+        .attr("class", "axisWhite")
+        .attr("transform",
+              "translate(" + margin.left + "," + margin.top + ")");
+    
+    var x = d3.scaleBand()
+      .range([ 0, width ])
+      .padding(0.2);
+    var xAxis = svg.append("g")
+      .attr("class", "axisWhite")
+      .attr("transform", "translate(0," + height + ")")
+    svg.append("text")
+        .attr("class", "axisWhite")
+        .attr("text-anchor", "end")
+        .attr("x", width - 440)
+        .attr("y", height + 40)
+        .text("Animal");
+    
+    var y = d3.scaleLinear()
+      .range([ height, 0]);
+    var yAxis = svg.append("g")
+      .attr("class", "axisWhite")
+    svg.append("text")
+        .attr("class", "axisWhite")
+        .attr("text-anchor", "end")
+        .attr("y", -50)
+        .attr("x", -150)
+        .attr("dy", ".75em")
+        .attr("transform", "rotate(-90)")
+        .text("Size in Inches");
+    
+    function update(selectedVar) {
+      d3.csv("sizes.csv", function(data) {
+    
+        x.domain(data.map(function(d) { return d.Animal; }))
+        xAxis.transition().duration(1000).call(d3.axisBottom(x))
+    
+        y.domain([0, d3.max(data, function(d) { return +d[selectedVar] }) ]);
+        yAxis.transition().duration(1000).call(d3.axisLeft(y));
+    
+        var u = svg.selectAll("rect")
+          .data(data)
+    
+        u
+          .enter()
+          .append("rect")
+          .merge(u)
+          .transition()
+          .duration(1000)
+            .attr("stroke", "white")
+            .attr("x", function(d) { return x(d.Animal); })
+            .attr("y", function(d) { return y(d[selectedVar]); })
+            .attr("width", x.bandwidth())
+            .attr("height", function(d) { return height - y(d[selectedVar]); })
+            .attr("fill", "#69b3a2")
+      })
+    
+    }
+    
+    update('Foot Size(in)')
+    
+    </script>
+
+<div text-align="center">
+    <p></p>
+    <div class="pagination">
+        <a href="index.html" class="previous">&#8249;</a>
+        <a href="locations.html" class="next">&#8250;</a>
+    </div>
+</div>
